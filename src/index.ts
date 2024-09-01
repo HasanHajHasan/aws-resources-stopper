@@ -4,9 +4,9 @@ import { stopRDSInstances } from "./stop/stop-rds";
 import { stopECSServiceTasks } from "./stop/stop-ecs";
 
 async function getAWSResources(): Promise<void> {
-    const region: string =  "ap-south-1"//getInput('region', { required: true });//
-    let keysString: string = "Environment"// JSON.parse(getInput('keys', { required: true, trimWhitespace: true }));//
-    const valuesString: string = ' dev  '//getInput('values', { required: true });//
+    const region: string = getInput('region', { required: true });// "ap-south-1"//
+    let keysString: string = getInput('keys', { required: true, trimWhitespace: true })//"Environment";//
+    const valuesString: string = getInput('values', { required: true });// ' dev  '//
 
     console.log("keysString", keysString);
     console.log("valuesString", valuesString);
