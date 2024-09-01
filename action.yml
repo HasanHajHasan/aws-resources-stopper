@@ -6,6 +6,10 @@ branding:
   color: 'red'
   
 inputs:
+  region:
+    description: 'AWS Region'
+    required: true
+    default: "us-east-1"
   keys:
     description: 'Comma-separated list of tag keys'
     required: true
