@@ -51156,9 +51156,9 @@ const core_1 = __nccwpck_require__(9093);
 const client_resource_groups_tagging_api_1 = __nccwpck_require__(6395);
 const stop_ecs_1 = __nccwpck_require__(3562);
 async function getAWSResources() {
-    const region = "ap-south-1"; //getInput('region', { required: true });//
-    let keysString = "Environment"; // JSON.parse(getInput('keys', { required: true, trimWhitespace: true }));//
-    const valuesString = ' dev  '; //getInput('values', { required: true });//
+    const region = (0, core_1.getInput)('region', { required: true }); // "ap-south-1"//
+    let keysString = (0, core_1.getInput)('keys', { required: true, trimWhitespace: true }); //"Environment";//
+    const valuesString = (0, core_1.getInput)('values', { required: true }); // ' dev  '//
     console.log("keysString", keysString);
     console.log("valuesString", valuesString);
     let keys = keysString.split(",");
