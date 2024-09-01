@@ -1,0 +1,19 @@
+name: AWS Resources Stopper
+description: Get aws resources based on tags and stop them
+
+branding:
+  icon: 'stop-circle'
+  color: 'red'
+  
+inputs:
+  keys:
+    description: 'Comma-separated list of tag keys'
+    required: true
+    default: "Environment,Cloud"
+  values:
+    description: 'Comma-separated list of tag values'
+    required: true
+    default: "dev,test | aws"
+runs:
+    using: 'node20'
+    main: 'dist/index.js'
