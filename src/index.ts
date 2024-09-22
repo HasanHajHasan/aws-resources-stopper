@@ -44,9 +44,8 @@ async function getAWSResources(): Promise<void> {
         const resourcesARN = (await resourceTagClient.send(getResourcesCommand)).ResourceTagMappingList.map((resource) => {
             return resource.ResourceARN
         });
-        console.log(resourcesARN);
 
-        // await stopRDSInstances(region,resourcesARN);
+        await stopRDSInstances(region,resourcesARN);
         await stopECSServiceTasks(region,resourcesARN)
     }
     catch (error) {

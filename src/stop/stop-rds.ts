@@ -23,8 +23,8 @@ export async function stopRDSInstances(region: string, resourcesARN: string[]) {
                 });
                 const describeResponse = await rdsClient.send(describeCommand);
                 const instanceStatus = describeResponse.DBInstances[0].DBInstanceStatus;
-                console.log("instanceStatus",instanceStatus);
-                if(instanceStatus.toLocaleLowerCase() != "starting") break;
+
+                if(instanceStatus.toLocaleLowerCase() != "starting") continue;
                 const stopCommand = new StopDBInstanceCommand({
                     DBInstanceIdentifier: dbInstanceIdentifier,
                 });
@@ -32,8 +32,6 @@ export async function stopRDSInstances(region: string, resourcesARN: string[]) {
                 await rdsClient.send(stopCommand);
                 
                 console.log(`RDS instance ${dbInstanceIdentifier} stopped successfully.`);
-            } else {
-                console.log(`ARN does not belong to an RDS instance: ${resourceARN}`);
             }
         }
     } catch (error) {
