@@ -11,9 +11,7 @@ export async function stopRDSInstances(region: string, resourcesARN: string[]) {
             return;
         }
 
-        for (const resourceARN of resourcesARN) {
-
-            console.log(`Processing ARN: ${resourceARN}`);
+        for (const resourceARN of resourcesARN) {   
 
             if (resourceARN.startsWith("arn:aws:rds:")) {
                 const dbInstanceIdentifier = resourceARN.split(":").pop().split("/").pop();

@@ -93,7 +93,6 @@ async function stopRDSInstances(region, resourcesARN) {
             return;
         }
         for (const resourceARN of resourcesARN) {
-            console.log(`Processing ARN: ${resourceARN}`);
             if (resourceARN.startsWith("arn:aws:rds:")) {
                 const dbInstanceIdentifier = resourceARN.split(":").pop().split("/").pop();
                 console.log(`Stopping RDS instance: ${dbInstanceIdentifier}`);
@@ -76920,9 +76919,9 @@ const client_resource_groups_tagging_api_1 = __nccwpck_require__(6395);
 const stop_rds_1 = __nccwpck_require__(6908);
 const stop_ecs_1 = __nccwpck_require__(3562);
 async function getAWSResources() {
-    const region = (0, core_1.getInput)('region', { required: true }); // "ap-south-1"//
-    let keysString = (0, core_1.getInput)('keys', { required: true, trimWhitespace: true }); //"Environment";//
-    const valuesString = (0, core_1.getInput)('values', { required: true }); // ' dev  '//
+    const region = (0, core_1.getInput)('region', { required: true }); //"eu-west-1"; //
+    let keysString = (0, core_1.getInput)('keys', { required: true, trimWhitespace: true }); //"Environment"; //
+    const valuesString = (0, core_1.getInput)('values', { required: true }); //" dev  "; //
     console.log("keysString", keysString);
     console.log("valuesString", valuesString);
     let keys = keysString.split(",");
@@ -76952,10 +76951,19 @@ async function getAWSResources() {
             Key: key,
             Values: tagValues[index],
         }));
-        const getResourcesCommand = new client_resource_groups_tagging_api_1.GetResourcesCommand({
-            TagFilters: tagFilters,
-        });
-        const resourcesARN = (await resourceTagClient.send(getResourcesCommand)).ResourceTagMappingList.map((resource) => {
+        let resources = [];
+        let paginationToken = "";
+        let response;
+        do {
+            const getResourcesCommand = new client_resource_groups_tagging_api_1.GetResourcesCommand({
+                TagFilters: tagFilters,
+                PaginationToken: paginationToken
+            });
+            response = await resourceTagClient.send(getResourcesCommand);
+            resources = resources.concat(response.ResourceTagMappingList);
+            paginationToken = response.PaginationToken;
+        } while (response.PaginationToken != "");
+        const resourcesARN = resources.map((resource) => {
             return resource.ResourceARN;
         });
         await (0, stop_rds_1.stopRDSInstances)(region, resourcesARN);
@@ -76965,8 +76973,7 @@ async function getAWSResources() {
         (0, core_1.setFailed)(error);
     }
 }
-async function stopResources() {
-}
+async function stopResources() { }
 getAWSResources();
 
 })();
